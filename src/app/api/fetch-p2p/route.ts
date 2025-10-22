@@ -1,9 +1,15 @@
 import axios from "axios";
 
-export async function POST(req) {
-  try {
-    const { cookie, csrfToken, userAgent } = await req.json();
+import { NextResponse } from "next/server";
 
+export async function POST(request: Request) {
+  const {
+    cookie,
+    csrfToken,
+    userAgent,
+  }: { cookie: string; csrfToken: string; userAgent: string } =
+    await request.json();
+  try {
     const url = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/order/list";
 
     const headers = {
@@ -21,9 +27,12 @@ export async function POST(req) {
     };
 
     const res = await axios.post(url, body, { headers });
-    return Response.json({ data: res.data });
+    return NextResponse.json({ data: res.data });
   } catch (error) {
     console.error(error);
-    return Response.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
