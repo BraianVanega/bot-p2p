@@ -1,6 +1,9 @@
 import Overview from "./components/overview";
 
-export default function Home() {
+export default async function Home() {
+  const response = await fetch("/api/binance/orders");
+  const orders = await response.json();
+
   return (
     <div className="min-h-screen bg-gray-900 text-white p-10">
       <h1 className="text-2xl mb-6 font-semibold">Binance P2P Reporter</h1>
@@ -14,7 +17,7 @@ export default function Home() {
         </button>
       </div>
 
-      <Overview orders={[]} />
+      <Overview orders={orders} />
     </div>
   );
 }
