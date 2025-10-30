@@ -1,21 +1,37 @@
-import { Spot } from "@binance/connector";
+import crypto from "crypto";
 import { NextResponse } from "next/server";
 
-const client = new Spot(
-  process.env.BINANCE_API_KEY as string,
-  process.env.BINANCE_API_SECRET as string
-);
-
-console.log(client);
-console.log(process.env.BINANCE_API_KEY);
-console.log(process.env.BINANCE_API_SECRET);
+const API_KEY = process.env.BINANCE_API_KEY!;
+const API_SECRET = process.env.BINANCE_API_SECRET!;
+const BASE_URL = "https://api.binance.com";
 
 export async function GET() {
   try {
-    const response = await client.getOrders("BTCUSDT");
-    return NextResponse.json(response.data);
+    const timestamp = Date.now();
+    const query = `symbol=BTCUSDT&timestamp=${timestamp}`;
+
+    const signature = crypto
+      .createHmac("sha256", API_SECRET)
+      .update(query)
+      .digest("hex");
+
+    const url = `${BASE_URL}/api/v3/allOrders?${query}&signature=${signature}`;
+
+    const res = await fetch(url, {
+      headers: {
+        "X-MBX-APIKEY": API_KEY,
+      },
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err);
+    }
+
+    const data = await res.json();
+    return NextResponse.json(data);
   } catch (error: any) {
-    console.error(error);
+    console.error("❌ Error al traer órdenes:", error);
     return NextResponse.json(
       { error: error.message },
       { status: 500, statusText: "Internal Server Error" }

@@ -14,12 +14,14 @@ export default async function Home() {
       <h1 className="text-2xl mb-6 font-semibold">Binance P2P Reporter</h1>
 
       <div className="flex flex-col gap-3 mb-6 max-w-lg">
-        <button
-          onClick={() => {}}
+        {/* <button
+          onClick={() => {
+            null;
+          }}
           className="bg-yellow-500 text-black font-bold py-2 px-4 rounded mt-3"
         >
           Obtener órdenes
-        </button>
+        </button> */}
       </div>
 
       <Overview orders={orders} />
