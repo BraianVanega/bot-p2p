@@ -1,11 +1,14 @@
-// /pages/api/binance/orders.ts
 import { Spot } from "@binance/connector";
 import { NextResponse } from "next/server";
 
 const client = new Spot(
-  process.env.NEXT_PUBLIC_BINANCE_API_KEY!,
-  process.env.NEXT_PUBLIC_BINANCE_API_SECRET!
+  process.env.BINANCE_API_KEY as string,
+  process.env.BINANCE_API_SECRET as string
 );
+
+console.log(client);
+console.log(process.env.BINANCE_API_KEY);
+console.log(process.env.BINANCE_API_SECRET);
 
 export async function GET() {
   try {
