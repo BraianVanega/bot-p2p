@@ -10,6 +10,7 @@ export async function GET() {
     const timestamp = Date.now();
     const query = `symbol=BTCUSDT&timestamp=${timestamp}`;
 
+    // Firma HMAC SHA256
     const signature = crypto
       .createHmac("sha256", API_SECRET)
       .update(query)
@@ -30,10 +31,13 @@ export async function GET() {
 
     const data = await res.json();
     return NextResponse.json(data);
-  } catch (error: any) {
-    console.error("❌ Error al traer órdenes:", error);
+  } catch (error: unknown) {
+    console.error(
+      "❌ Error al traer órdenes:",
+      error instanceof Error ? error.message : "Unknown error"
+    );
     return NextResponse.json(
-      { error: error.message },
+      { error: error instanceof Error ? error.message : "Unknown error" },
       { status: 500, statusText: "Internal Server Error" }
     );
   }
