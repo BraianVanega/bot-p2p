@@ -1,6 +1,8 @@
 import Overview from "./components/overview";
 
 export default async function Home() {
+  // const orders = await getP2POrders();
+
   return (
     <div className="min-h-screen bg-gray-900 text-white p-10">
       <h1 className="text-2xl mb-6 font-semibold">Binance P2P Reporter</h1>
